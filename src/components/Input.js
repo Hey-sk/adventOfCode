@@ -1,0 +1,17 @@
+
+import './input.css'
+
+export default function Input({title, heading, handleSubmit, defaultInput}) {
+    return (
+        <>
+            <div className="inputComponent">
+                <div className='inputTitle'>{title}</div>
+                <div className='inputHeading'>{heading}</div>
+                <form className="inputComponentForm" onSubmit={handleSubmit}>
+                    <textarea id='textInput' defaultValue={defaultInput}/>
+                    <button type='submit'> Process </button>
+                </form>
+            </div>
+        </>
+    )
+}

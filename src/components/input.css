@@ -1,0 +1,32 @@
+.inputComponent {
+  background-color: #1FD537;
+  color: #f0f0f0;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-width: 350px;
+}
+
+.inputComponentForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+textarea {
+    height: 550px;
+    min-width: 300px;
+}
+
+.inputTitle {
+  font-weight: 600;
+  font-size: 1.4em;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+.inputHeading {
+  margin-bottom: 7px;
+  font-size: 1.15em;
+}

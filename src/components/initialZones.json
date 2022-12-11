@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "stackID": 1,
+      "contents": ["D", "L", "J", "R", "V", "G", "F"]
+    },
+    {
+      "stackID": 2,
+      "contents": ["T", "P", "M", "B", "V", "H", "J", "S"]
+    },
+    {
+      "stackID": 3,
+      "contents": ["V", "H", "M", "F", "D", "G", "P", "C"]
+    },
+    {
+      "stackID": 4,
+      "contents": ["M", "D", "P", "N", "G", "Q"]
+    },
+    {
+      "stackID": 5,
+      "contents": ["J", "L", "H", "N", "F"]
+    },
+    {
+      "stackID": 6,
+      "contents": ["N", "F", "V", "Q", "D", "G", "T", "Z"]
+    },
+    {
+      "stackID": 7,
+      "contents": ["F", "D", "B", "L"]
+    },
+    {
+      "stackID": 8,
+      "contents": ["M", "J", "B", "S", "V", "D", "N"]
+    },
+    {
+      "stackID": 9,
+      "contents": ["G", "L", "D"]
+    }
+  ]
+}

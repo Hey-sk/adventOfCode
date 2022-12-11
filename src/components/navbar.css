@@ -1,0 +1,25 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: #B3000C;
+    align-items: center;
+    padding: 10px 35px 20px 35px;
+}
+.navImg {
+    height: 60px;
+    width: 60px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.navTitle {
+    font-size: 4em;
+    color: #f0f0f0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.navButton {
+    background-color: #E40010;
+    color: #f0f0f0;
+    font-weight: 900;
+}

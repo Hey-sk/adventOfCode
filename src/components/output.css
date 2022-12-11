@@ -1,0 +1,21 @@
+.outputComponent {
+    background-color: #1FD537;
+    color: #f0f0f0;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 350px;
+    padding-top: 60px;
+}
+
+.outputSolution {
+    display: flex;
+    justify-content: center;
+    background-color: #00B32C;
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 20px;
+}
