@@ -35,22 +35,21 @@ export default function Challenge5() {
     return newZone;
   };
 
-  // update the SupplyZones
-  const updateSupplyZones = (fromZone, toZone) => {
-    // console.log(JSON.stringify(supplyZones.map(zone => zone.contents)))
-    setSupplyZones(
-      supplyZones.map((prev) => {
-        if (prev.stackID === fromZone) {
-          return { ...prev, contents: setPullFromContents(fromZone) };
-        } else if (prev.stackID === toZone) {
-          return { ...prev, contents: setAddToContents(fromZone, toZone) };
-        } else {
-          return prev;
-        }
-      })
-    );
-    return (supplyZones)
-  };
+// update the SupplyZones
+const updateSupplyZones = (fromZone, toZone) => {
+  setSupplyZones(
+    supplyZones.map((prev) => {
+      if (prev.stackID === fromZone) {
+        return { ...prev, contents: setPullFromContents(fromZone) };
+      } else if (prev.stackID === toZone) {
+        return { ...prev, contents: setAddToContents(fromZone, toZone) };
+      } else {
+        return prev;
+      }
+    })
+  );
+};
+
 
 
 
