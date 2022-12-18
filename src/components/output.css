@@ -8,14 +8,29 @@
     justify-content: flex-start;
     align-items: center;
     min-width: 350px;
-    padding-top: 60px;
+    padding-top: 25px;
 }
 
 .outputSolution {
     display: flex;
+    align-items: center;
     justify-content: center;
     background-color: #00B32C;
+    font-size: 1.3em;
     width: 100%;
-    padding: 5px;
-    margin-bottom: 20px;
+    padding: 3px;
+    margin-top: 2px;
+    margin-bottom: 10px;
+    min-height: 3em;
+}
+
+.line {
+    width: 70%;
+    border: 1px solid #fff;
+    margin: 25px 0;
+
+}
+
+.outputHeading {
+    font-size: 1.7em;
 }

@@ -9,7 +9,7 @@ export default function Input({title, heading, handleSubmit, defaultInput}) {
                 <div className='inputHeading'>{heading}</div>
                 <form className="inputComponentForm" onSubmit={handleSubmit}>
                     <textarea id='textInput' defaultValue={defaultInput}/>
-                    <button type='submit'> Process </button>
+                    <button type='submit'> LOAD INPUT </button>
                 </form>
             </div>
         </>

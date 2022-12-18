@@ -6,6 +6,7 @@ import Challenge2 from "./pages/day2/Challenge2";
 import Challenge3 from "./pages/day3/Challenge3";
 import Challenge4 from "./pages/day4/Challenge4";
 import Challenge5 from "./pages/day5/Challenge5";
+import Challenge6 from "./pages/day6/Challenge6";
 import Layout from "./components/Layout";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path="day3" element={<Challenge3 />} />
             <Route path="day4" element={<Challenge4 />} />
             <Route path="day5" element={<Challenge5 />} />
+            <Route path="day6" element={<Challenge6 />} />
             <Route path="*" element={<HomePage />} />
           </Route>
         </Routes>

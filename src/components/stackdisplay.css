@@ -1,0 +1,28 @@
+.stackChart{
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-right: 40px;
+}
+.stack {
+    text-align: center;
+    border-bottom: 1px solid black;
+    font-weight: 800;;
+    margin-inline: 3px;
+    margin-bottom: 50px;
+}
+.stackArrangement {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 3px;
+}
+
+.singleBox {
+    display: flex;
+    margin: 3px;
+    padding: 5px;
+    background-color: #B3000C;
+    color: white;
+    justify-content: center;
+    border-radius: 4px;
+}

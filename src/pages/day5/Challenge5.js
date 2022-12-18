@@ -1,97 +1,16 @@
 import initalZones from "../../components/initialZones.json";
 import "./challenge5.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Input from "../../components/Input";
 import Output from "../../components/Output";
+import StackDisplay from "../../components/StackDisplay";
 
 export default function Challenge5() {
-  const [supplyZones, setSupplyZones] = useState([]);
+  const [supplyZones, setSupplyZones] = useState(initalZones.data);
   const [instructions, setInstructions] = useState([]);
+  const [cratePicked, setCratePicked] = useState("");
 
-  useEffect(() => {
-    setSupplyZones(initalZones.data);
-  }, []);
-
-  // get the pickedCrate
-  const getTargetCrate = (fromZone) => {
-    const targetCrate =
-      supplyZones[fromZone - 1].contents[
-        supplyZones[fromZone - 1].contents.length - 1
-      ];
-    console.log("target is " + targetCrate);
-    return targetCrate;
-  };
-
-  // remove the pickedCrate
-  const setPullFromContents = (fromZone) => {
-    const oldZone = supplyZones[fromZone - 1].contents;
-    const newZone = oldZone.slice(0, oldZone.length - 1);
-    return newZone;
-  };
-  // add the picked Crate
-  const setAddToContents = (fromZone, toZone) => {
-    const oldZone = supplyZones[toZone - 1].contents;
-    const newZone = [...oldZone, getTargetCrate(fromZone)];
-    return newZone;
-  };
-
-// update the SupplyZones
-const updateSupplyZones = (fromZone, toZone) => {
-  setSupplyZones(
-    supplyZones.map((prev) => {
-      if (prev.stackID === fromZone) {
-        return { ...prev, contents: setPullFromContents(fromZone) };
-      } else if (prev.stackID === toZone) {
-        return { ...prev, contents: setAddToContents(fromZone, toZone) };
-      } else {
-        return prev;
-      }
-    })
-  );
-};
-
-
-
-
-  useEffect(() => {
-    // supplyZones.length && getTargetCrate(1)
-    // supplyZones.length && console.log(setPullFromContents(1))
-    // supplyZones.length && console.log(setAddToContents(1, 9))
-    supplyZones.length && updateSupplyZones(1, 9);
-    console.log(JSON.stringify(supplyZones.map(zone => zone.contents),null))
-
-  }, [instructions]);
-
-  
-
-  const stackDisplay =
-    supplyZones.length &&
-    
-    supplyZones.map((obj) => {
-      const contentsCopy = obj.contents;
-      return (
-        <div className="stack">
-          <div className="stackArrangement">
-            {contentsCopy.map((box) => {
-              return (
-                <span className="stackContents">
-                  <span className="singleBox">{box}</span>
-                </span>
-              );
-            })}
-          </div>
-          <div>{obj.stackID}</div>
-        </div>
-      );
-    });
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const input = event.target.textInput.value.split("\n");
-    setInstructions(parseInput(input));
-  };
-
-  // remove anything that can't be converted to a number, and convert the remaining values to numbers.
+  // define what your input should look like in order to process it...
   const parseInput = (input) => {
     const inputArray = input.map((line) => line.split(" "));
     let cleanArray = inputArray.map((line) => {
@@ -103,16 +22,80 @@ const updateSupplyZones = (fromZone, toZone) => {
     return cleanArray;
   };
 
+  // get the instructions and process those instructions
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const input = event.target.textInput.value.split("\n");
+    setInstructions(parseInput(input));
+    processInstructions2();
+  };
+
+  const processInstructions = () => {
+    instructions.map((line) => {
+      const [repititions, fromHere, toHere] = line;
+      let oldArrangement = [...supplyZones];
+
+      for (let i = 0; i < repititions; i++) {
+        let stackToPickFrom = oldArrangement[fromHere - 1].contents;
+        let destinationStack = oldArrangement[toHere - 1].contents;
+        const thisPickedCrate = stackToPickFrom[stackToPickFrom.length - 1];
+        console.log(
+          `step ${i + 1}: move ${thisPickedCrate} from ${fromHere} to ${toHere}`
+        );
+
+        stackToPickFrom = stackToPickFrom.pop();
+        destinationStack = destinationStack.push(thisPickedCrate);
+      }
+    });
+  };
+
+  const processInstructions2 = () => {
+    instructions.map((line) => {
+      const [stackSize, fromHere, toHere] = line;
+      let oldArrangement = [...supplyZones];
+
+      let stackToPickFrom = oldArrangement[fromHere - 1].contents;
+      let destinationStack = oldArrangement[toHere - 1].contents;
+      const thisPickedStack = stackToPickFrom.slice(stackToPickFrom.length - stackSize, stackToPickFrom.length)
+      console.log(
+        `move ${thisPickedStack} from ${fromHere} to ${toHere}`
+      );
+
+      thisPickedStack.forEach(crate => stackToPickFrom.pop()) 
+      thisPickedStack.forEach(crate => destinationStack.push(crate))
+      //destinationStack = destinationStack.push(thisPickedCrate);
+    });
+  };
+
+  const handleSolution1Click = (event) => {
+    processInstructions();
+  };
+
+  const handleSolution2Click = (event) => {
+    console.log("click");
+  };
+
+  //get the topCrate from each Zone
+  const zoneContents = supplyZones.map((zone) => zone.contents);
+  const topCrates = zoneContents.map((crate) =>
+    crate.slice(crate.length - 1, crate.length)
+  );
+
   return (
     <div className="main-wrapper">
-      <div className="stackChart">{stackDisplay}</div>
+      <StackDisplay supplyZones={supplyZones} />
       <Input
         title="day5"
         heading="suppy stacks"
         handleSubmit={handleSubmit}
-        defaultInput="move 3 from 1 to 9"
+        defaultInput="move 1 from 2 to 1"
       />
-      <Output solution="" part2Solution="" />
+      <Output
+        solution={topCrates.map((crate) => crate + " ")}
+        part2Solution={topCrates.map((crate) => crate + " ")}
+        clickSolution1={handleSolution1Click}
+        clickSolution2={handleSolution2Click}
+      />
     </div>
   );
 }
