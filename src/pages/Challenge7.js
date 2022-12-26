@@ -1,18 +1,21 @@
-import { useState } from 'react'
+import { useState } from "react";
 import Input from "../components/Input";
 import Output from "../components/Output";
+import defaultInputs from "../components/Day7inputs";
 
 export default function Challenge7() {
-  const [sol1, setSol1] = useState('')
+  const [sol1, setSol1] = useState("");
 
-  const maxSize = 100000
+  const maxSize = 100000;
   const handleSubmit = (event) => {
     event.preventDefault();
     const input = parseInput(event.target.textInput.value);
     directories = getCurrentDir(input);
     const updatedDirectories = getChildren(directories);
+    // const updatedDirectories2 = getChildren2(directories);
     const completedDirectories = getChildFileSizes(updatedDirectories);
-    console.log(getSolution1(completedDirectories))
+
+    console.log(getSolution1(completedDirectories));
   };
 
   //parse the input
@@ -22,15 +25,16 @@ export default function Challenge7() {
       .filter((str) => str !== "")
       .map((str) => str.split("\n"))
       .map((line) => line.filter((str) => str !== ""))
-      .map((line) => line.filter((item) => item !== "ls"));  
+      .map((line) => line.filter((item) => item !== "ls"));
     return input;
   };
 
   let currentDir = ["/"];
   let directories = [];
 
+  //identify the current directory path.
   const getCurrentDir = (input) => {
-    //identify the current directory path.
+    console.log("starting getCurrentDir");
     input.forEach((line) => {
       const [cmd, arg] = line[0].split(" ");
       if (cmd === "cd") {
@@ -52,7 +56,7 @@ export default function Challenge7() {
           children: [],
           fileSize: 0,
           childrenFileSize: [],
-          allSizesAreValid: true
+          allSizesAreValid: true,
         });
         line.forEach((lsResult) => {
           const [prefix, suffix] = lsResult.split(" ");
@@ -81,11 +85,15 @@ export default function Challenge7() {
         });
       }
     });
+    console.log({ getCurrentDirResults: directories });
     return directories;
   };
 
-  const getChildren = (input) => {
-    input.forEach((dirObj) => {
+  //update the input with an array of children (include current dir in the array)
+  const getChildren2 = (input) => {
+    console.log("starting getChildren -- bad version");
+    input.forEach((dirObj, index) => {
+      const thisIndex = index;
       const thisDir = dirObj.dirName;
       const children = [];
       input.forEach((dirObj) => {
@@ -108,39 +116,124 @@ export default function Challenge7() {
     });
     console.log({
       result: input.map((dir) => {
-        return { dirName: dir.dirName, children: dir.children, childrenFileSize: dir.childrenFileSize};
+        return {
+          dirName: dir.dirName,
+          children: dir.children,
+          childrenFileSize: dir.childrenFileSize,
+        };
       }),
     });
-
+    console.log({ getChildrenResult: input });
     return input;
   };
 
-  const getChildFileSizes = (input) => {
-    console.log('getting ChildFileSizes')
-    input.forEach(dirObj => {
-      console.log(`updating ${dirObj.dirName}`)
-      const thisDir = dirObj.dirName
-      const fileSizesForChildren = dirObj.children.map(dirName => input.filter(dirObj => dirObj.dirName === dirName).map(dirObj => dirObj.fileSize)).flat()
-      const allSizesAreValid = fileSizesForChildren.map(size => size <= maxSize).every(val => val === true)
-      console.log({thisDir, fileSizesForChildren, allSizesAreValid})
-      input = input.map(prev => {
+  //fix to getChildren -- use the index instead of the name (to allow for duplicate naming.)
+  const getChildren = (input) => {
+    console.log("starting getChildren");
+    // for (const dirIndex in input) {
+    input.forEach((thisInput, dirIndex) => {
+      const thisDir = input[dirIndex];
+      const thisDirStr = thisInput.dir.toString();
+      let children = [];
+      input.forEach((altDir, altIndex) => {
+        const altDirStr = altDir.dir.toString();
+        if (altDirStr.includes(thisDirStr)) {
+          children.push(altIndex);
+        }
+        input = input.map((prev) => {
+          if (prev === thisInput) {
+            return { ...prev, children: children };
+          } else {
+            return prev;
+          }
+        });
+      });
+      // }
+    });
+    console.log({ input });
+    return input;
+  };
+
+  //update fileSizes of all dirs identitifed in getChildren() -- old version.
+  const getChildFileSizesOld = (input) => {
+    console.log("getting ChildFileSizes");
+    input.forEach((dirObj) => {
+      const thisDir = dirObj.dirName;
+      const fileSizesForChildren = dirObj.children
+        .map((dirName) =>
+          input
+            .filter((dirObj) => dirObj.dirName === dirName)
+            .map((dirObj) => dirObj.fileSize)
+        )
+        .flat();
+      const allSizesAreValid = fileSizesForChildren
+        .map((size) => size <= maxSize)
+        .every((val) => val === true);
+      input = input.map((prev) => {
         if (prev.dirName === thisDir) {
-          return {...prev, childrenFileSize: [...prev.childrenFileSize, ...fileSizesForChildren], allSizesAreValid: allSizesAreValid}
+          return {
+            ...prev,
+            childrenFileSize: [
+              ...prev.childrenFileSize,
+              ...fileSizesForChildren,
+            ],
+            allSizesAreValid: allSizesAreValid,
+          };
+        } else {
+          return prev;
+        }
+      });
+    });
+    console.log({
+      getChildFileSizesResult: input.map((val) => {
+        return {
+          dir: val.dir,
+          children: val.children,
+          fileSize: val.fileSize,
+          childrenFileSize: val.childrenFileSize,
+        };
+      }),
+    });
+    return input;
+  };
+
+  //update fileSizes of all dirs identitifed in getChildren() and check to see if the sizes are valid.
+  const getChildFileSizes = (input) => {
+    console.log("getting ChildFileSizes -- new version");
+    input.forEach((inputVal) => {
+      const childFileSizes = inputVal.children.map(numVal => input[numVal].fileSize).reduce((acc, val) => acc + val, 0)
+      const isValid = childFileSizes <= maxSize
+      console.log({thisDir: inputVal.dirName, children: inputVal.children, childFileSizes, isValid})
+      input = input.map(prev => {
+        if (prev === inputVal) {
+          return {...prev, childrenFileSize: childFileSizes, allSizesAreValid: isValid}
         } else {
           return prev
         }
       })
     })
-    return input
-  }
+    console.log({
+      getChildFileSizesResult: input.map((val) => {
+        return {
+          dir: val.dir,
+          children: val.children,
+          fileSize: val.fileSize,
+          childrenFileSize: val.childrenFileSize,
+        };
+      }),
+    });
+    return input;
+  };
 
+  //filter for anything over the max size and reduce to get the solution.
   const getSolution1 = (input) => {
-    const validDirs = input.filter(dirObj => dirObj.allSizesAreValid === true)
-    const validSizes = validDirs.map(dirObj => dirObj.childrenFileSize.reduce((acc, val) => acc + val, 0))
-    const result = validSizes.reduce((acc, val) => acc + val, 0)
-    console.log({validDirs, result})
-    return result 
-  }
+    console.log("starting getSolution1");
+    const validDirs = input.filter(
+      (dirObj) => dirObj.allSizesAreValid === true
+    );
+    const validSizes = validDirs.map(dir => dir.childrenFileSize)
+    return validSizes.reduce((acc, val) => acc + val, 0);
+  };
 
   return (
     <div className="main-wrapper">
@@ -148,7 +241,7 @@ export default function Challenge7() {
         title="day7"
         heading="No Space Left on Device"
         handleSubmit={handleSubmit}
-        defaultInput={`$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k`}
+        defaultInputs={defaultInputs}
       />
       <Output
         solution={sol1}

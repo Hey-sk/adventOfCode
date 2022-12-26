@@ -23,8 +23,9 @@
     border-radius: 5px;
     padding: 10px;
     cursor: pointer;
+    max-width: 175px;  
     width: 15vw;
-    height: 15vw;
+    aspect-ratio: 1;
 }
 .homePageLink > * {
     color: rgba(240, 240, 240, .8);

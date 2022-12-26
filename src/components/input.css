@@ -7,7 +7,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-width: 350px;
 }
 
 .inputComponentForm {
@@ -16,7 +15,7 @@
   justify-content: center;
 }
 textarea {
-    height: 550px;
+    height: 400px;
     min-width: 300px;
     overflow: scroll;
     border: none;
@@ -38,4 +37,10 @@ textarea {
   margin-bottom: 7px;
   font-size: 1.15em;
   align-self: flex-start; 
+}
+.inputRadioWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
 }
