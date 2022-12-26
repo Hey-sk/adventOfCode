@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Input from "../../components/Input";
-import Output from "../../components/Output";
+import Input from "../components/Input";
+import Output from "../components/Output";
 
 export default function Challenge4() {
   const [cleanUpTasks, setCleanUpTasks] = useState([]);

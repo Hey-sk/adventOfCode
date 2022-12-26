@@ -1,6 +1,5 @@
-import './challenge3.css'
-import Input from '../../components/Input'
-import Output from '../../components/Output'
+import Input from '../components/Input'
+import Output from '../components/Output'
 import { useEffect, useState } from 'react'
 
 export default function Challenge3(){

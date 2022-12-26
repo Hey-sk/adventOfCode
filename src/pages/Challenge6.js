@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Input from "../../components/Input";
-import Output from "../../components/Output";
+import Input from "../components/Input";
+import Output from "../components/Output";
 
 export default function Challenge6() {
   const [code, setCode] = useState([]);
@@ -11,9 +11,6 @@ export default function Challenge6() {
     const input = event.target.textInput.value.split("");
     setCode(input);
   };
-
-  //   create a decoder to keep track of what you've reviewed
-  const decoder = [];
 
   //go through the code and prepare it for analysis
   const preparedCode = (minStartingLength) => code.map((char, index) => {

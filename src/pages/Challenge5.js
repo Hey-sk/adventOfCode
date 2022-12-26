@@ -1,14 +1,13 @@
-import initalZones from "../../components/initialZones.json";
-import "./challenge5.css";
+import initalZones from "../components/initialZones.json";
 import { useState } from "react";
-import Input from "../../components/Input";
-import Output from "../../components/Output";
-import StackDisplay from "../../components/StackDisplay";
+import Input from "../components/Input";
+import Output from "../components/Output";
+import StackDisplay from "../components/StackDisplay";
 
 export default function Challenge5() {
-  const [supplyZones, setSupplyZones] = useState(initalZones.data);
+  const supplyZones = (initalZones.data);
   const [instructions, setInstructions] = useState([]);
-  const [cratePicked, setCratePicked] = useState("");
+  
 
   // define what your input should look like in order to process it...
   const parseInput = (input) => {
@@ -31,7 +30,7 @@ export default function Challenge5() {
   };
 
   const processInstructions = () => {
-    instructions.map((line) => {
+    instructions.forEach((line) => {
       const [repititions, fromHere, toHere] = line;
       let oldArrangement = [...supplyZones];
 
@@ -50,7 +49,7 @@ export default function Challenge5() {
   };
 
   const processInstructions2 = () => {
-    instructions.map((line) => {
+    instructions.forEach((line) => {
       const [stackSize, fromHere, toHere] = line;
       let oldArrangement = [...supplyZones];
 

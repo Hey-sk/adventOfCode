@@ -4,20 +4,27 @@
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
-
+body {
+    background-color: rgb(65, 65, 80);
+}
 button {
-    background-color: #00B32C;
+    background-color: rgba(80, 180, 80);
     color: white;
     border: none;
     font-size: 1.2em;
     padding: 6px 11px;
     border-radius: 3px;
     margin: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: rgba(80, 180, 80,.4);
 }
 
 .main-wrapper {
     display: flex;
+    flex-flow: row wrap;
     justify-content: center;
     margin-top: 30px;
-    gap: 5px;
+    gap: 55px;
 }

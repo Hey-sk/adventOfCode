@@ -2,13 +2,22 @@ import "./homePage.css";
 import { Link } from "react-router-dom";
 
 export default function HomePage() {
-  const availablePages = [1, 2, 3, 4, 5, 6];
+  const availablePages = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25,
+  ];
+  const chistmasZebra = (index) => {
+    return { backgroundColor: index % 2 ? "rgb(255, 80, 80)" : "rgba(80, 180, 80)" };
+  };
 
   const getLinks = availablePages.map((num, index) => {
     return (
-      <span className="homePageLink" key={index}>
-        <Link to={`day${num}`}>{`Day${num}`}</Link>
-      </span>
+      <div className="homePageLink" style={chistmasZebra(index)} key={index}>
+        <div>Day</div>
+        <div>
+          <Link className="dayLink" to={`day${num}`} style={{textDecoration: 'none'}}>{num}</Link>
+        </div>
+      </div>
     );
   });
 
@@ -16,9 +25,7 @@ export default function HomePage() {
     <>
       <div className="homePage">
         <h2 className="title">Advent of Code!</h2>
-        <div className="homePageTree">
-          {getLinks}
-        </div>
+        <div className="homePageTree">{getLinks}</div>
       </div>
     </>
   );

@@ -15,10 +15,29 @@
 }
 
 .homePageLink {
-    height: 100px;
-    width: 100px;
-    background-color: tomato;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
     border-radius: 5px;
-    text-align: center;
-    padding-top: 10px;
+    padding: 10px;
+    cursor: pointer;
+    width: 15vw;
+    height: 15vw;
+}
+.homePageLink > * {
+    color: rgba(240, 240, 240, .8);
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 1.3rem;
+}
+.dayLink {
+    color: rgba(240, 240, 240, .8);
+    font-size: 1.8rem;
+    text-decoration: none;
+    line-height: 1;
+}
+.title {
+    color: rgba(240, 240, 240, .8);
 }
