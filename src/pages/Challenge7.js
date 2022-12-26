@@ -89,45 +89,7 @@ export default function Challenge7() {
     return directories;
   };
 
-  //update the input with an array of children (include current dir in the array)
-  const getChildren2 = (input) => {
-    console.log("starting getChildren -- bad version");
-    input.forEach((dirObj, index) => {
-      const thisIndex = index;
-      const thisDir = dirObj.dirName;
-      const children = [];
-      input.forEach((dirObj) => {
-        if (dirObj.dir.includes(thisDir)) {
-          const fullPath = dirObj.dir;
-          const indexOfThisDir = fullPath.indexOf(thisDir);
-          const path = dirObj.dir.slice(indexOfThisDir, dirObj.dir.length);
-          path.forEach((dirName) => {
-            !children.includes(dirName) && children.push(dirName);
-          });
-          input = input.map((prev) => {
-            if (prev.dir === dirObj.dir) {
-              return { ...prev, children: children };
-            } else {
-              return prev;
-            }
-          });
-        }
-      });
-    });
-    console.log({
-      result: input.map((dir) => {
-        return {
-          dirName: dir.dirName,
-          children: dir.children,
-          childrenFileSize: dir.childrenFileSize,
-        };
-      }),
-    });
-    console.log({ getChildrenResult: input });
-    return input;
-  };
-
-  //fix to getChildren -- use the index instead of the name (to allow for duplicate naming.)
+  //update the input with an array of children-indices
   const getChildren = (input) => {
     console.log("starting getChildren");
     // for (const dirIndex in input) {
@@ -154,50 +116,7 @@ export default function Challenge7() {
     return input;
   };
 
-  //update fileSizes of all dirs identitifed in getChildren() -- old version.
-  const getChildFileSizesOld = (input) => {
-    console.log("getting ChildFileSizes");
-    input.forEach((dirObj) => {
-      const thisDir = dirObj.dirName;
-      const fileSizesForChildren = dirObj.children
-        .map((dirName) =>
-          input
-            .filter((dirObj) => dirObj.dirName === dirName)
-            .map((dirObj) => dirObj.fileSize)
-        )
-        .flat();
-      const allSizesAreValid = fileSizesForChildren
-        .map((size) => size <= maxSize)
-        .every((val) => val === true);
-      input = input.map((prev) => {
-        if (prev.dirName === thisDir) {
-          return {
-            ...prev,
-            childrenFileSize: [
-              ...prev.childrenFileSize,
-              ...fileSizesForChildren,
-            ],
-            allSizesAreValid: allSizesAreValid,
-          };
-        } else {
-          return prev;
-        }
-      });
-    });
-    console.log({
-      getChildFileSizesResult: input.map((val) => {
-        return {
-          dir: val.dir,
-          children: val.children,
-          fileSize: val.fileSize,
-          childrenFileSize: val.childrenFileSize,
-        };
-      }),
-    });
-    return input;
-  };
-
-  //update fileSizes of all dirs identitifed in getChildren() and check to see if the sizes are valid.
+  //update fileSizes of all dirs using indices set in getChildren() and check to see if the sizes are valid.
   const getChildFileSizes = (input) => {
     console.log("getting ChildFileSizes -- new version");
     input.forEach((inputVal) => {
