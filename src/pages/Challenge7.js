@@ -16,6 +16,7 @@ export default function Challenge7() {
     const completedDirectories = getChildFileSizes(updatedDirectories);
 
     console.log(getSolution1(completedDirectories));
+    console.log(getSolution2(completedDirectories));
   };
 
   //parse the input
@@ -153,6 +154,19 @@ export default function Challenge7() {
     const validSizes = validDirs.map(dir => dir.childrenFileSize)
     return validSizes.reduce((acc, val) => acc + val, 0);
   };
+
+  const getSolution2 = (input) => {
+    console.log('starting getSolution2')
+    const diskSpace = 70000000
+    const sizeReqdForUpdate = 30000000
+    const sizeOfRoot = input[0].childrenFileSize
+    const unusedSpace = diskSpace - sizeOfRoot
+    const spaceNeeded = sizeReqdForUpdate - unusedSpace
+    const validDirectories = input.filter(inputVal => inputVal.childrenFileSize >= spaceNeeded)
+    const validSizes = validDirectories.map(dir => dir.childrenFileSize)
+    const solution = validSizes.reduce((acc, val) => val > acc ? acc : val)
+    return solution
+  }
 
   return (
     <div className="main-wrapper">
