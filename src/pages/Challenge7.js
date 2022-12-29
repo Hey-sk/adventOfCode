@@ -5,6 +5,7 @@ import defaultInputs from "../components/Day7inputs";
 
 export default function Challenge7() {
   const [sol1, setSol1] = useState("");
+  const [sol2, setSol2] = useState("");
 
   const maxSize = 100000;
   const handleSubmit = (event) => {
@@ -95,7 +96,6 @@ export default function Challenge7() {
     console.log("starting getChildren");
     // for (const dirIndex in input) {
     input.forEach((thisInput, dirIndex) => {
-      const thisDir = input[dirIndex];
       const thisDirStr = thisInput.dir.toString();
       let children = [];
       input.forEach((altDir, altIndex) => {
@@ -152,9 +152,11 @@ export default function Challenge7() {
       (dirObj) => dirObj.allSizesAreValid === true
     );
     const validSizes = validDirs.map(dir => dir.childrenFileSize)
-    return validSizes.reduce((acc, val) => acc + val, 0);
+    const solution = validSizes.reduce((acc, val) => acc + val, 0);
+    setSol1(solution)
+    return solution
   };
-
+  //filter input to find the smallest directory that can be deleted to get the space needed.
   const getSolution2 = (input) => {
     console.log('starting getSolution2')
     const diskSpace = 70000000
@@ -165,6 +167,7 @@ export default function Challenge7() {
     const validDirectories = input.filter(inputVal => inputVal.childrenFileSize >= spaceNeeded)
     const validSizes = validDirectories.map(dir => dir.childrenFileSize)
     const solution = validSizes.reduce((acc, val) => val > acc ? acc : val)
+    setSol2(solution)
     return solution
   }
 
@@ -178,7 +181,7 @@ export default function Challenge7() {
       />
       <Output
         solution={sol1}
-        part2Solution=""
+        part2Solution={sol2}
         // clickSolution1={}
         // clickSolution2={}
       />

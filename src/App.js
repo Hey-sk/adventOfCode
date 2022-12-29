@@ -8,25 +8,24 @@ import Challenge4 from "./pages/Challenge4";
 import Challenge5 from "./pages/Challenge5";
 import Challenge6 from "./pages/Challenge6";
 import Challenge7 from "./pages/Challenge7";
-
-// import Challenge8 from "./pages/day8/Challenge8";
-// import Challenge9 from "./pages/day9/Challenge9";
-// import Challenge10 from "./pages/day10/Challenge10";
-// import Challenge11 from "./pages/day11/Challenge11";
-// import Challenge12 from "./pages/day12/Challenge12";
-// import Challenge13 from "./pages/day13/Challenge13";
-// import Challenge14 from "./pages/day14/Challenge14";
-// import Challenge15 from "./pages/day15/Challenge15";
-// import Challenge16 from "./pages/day16/Challenge16";
-// import Challenge17 from "./pages/day17/Challenge17";
-// import Challenge18 from "./pages/day18/Challenge18";
-// import Challenge19 from "./pages/day19/Challenge19";
-// import Challenge20 from "./pages/day20/Challenge20";
-// import Challenge21 from "./pages/day21/Challenge21";
-// import Challenge22 from "./pages/day22/Challenge22";
-// import Challenge23 from "./pages/day23/Challenge23";
-// import Challenge24 from "./pages/day24/Challenge24";
-// import Challenge25 from "./pages/day25/Challenge25";
+import Challenge8 from "./pages/Challenge8";
+// import Challenge9 from "./pages/Challenge9";
+// import Challenge10 from "./pages/Challenge10";
+// import Challenge11 from "./pages/Challenge11";
+// import Challenge12 from "./pages/Challenge12";
+// import Challenge13 from "./pages/Challenge13";
+// import Challenge14 from "./pages/Challenge14";
+// import Challenge15 from "./pages/Challenge15";
+// import Challenge16 from "./pages/Challenge16";
+// import Challenge17 from "./pages/Challenge17";
+// import Challenge18 from "./pages/Challenge18";
+// import Challenge19 from "./pages/Challenge19";
+// import Challenge20 from "./pages/Challenge20";
+// import Challenge21 from "./pages/Challenge21";
+// import Challenge22 from "./pages/Challenge22";
+// import Challenge23 from "./pages/Challenge23";
+// import Challenge24 from "./pages/Challenge24";
+// import Challenge25 from "./pages/Challenge25";
 
 import Layout from "./components/Layout";
 
@@ -44,8 +43,8 @@ function App() {
             <Route path="day5" element={<Challenge5 />} />
             <Route path="day6" element={<Challenge6 />} />
             <Route path="day7" element={<Challenge7 />} />
-            {/* <Route path="day8" element={<Challenge8 />} />
-            <Route path="day9" element={<Challenge9 />} />
+            <Route path="day8" element={<Challenge8 />} />
+            {/* <Route path="day9" element={<Challenge9 />} />
             <Route path="day10" element={<Challenge10 />} />
             <Route path="day11" element={<Challenge11 />} />
             <Route path="day12" element={<Challenge12 />} />
