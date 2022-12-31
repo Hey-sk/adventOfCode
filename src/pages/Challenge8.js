@@ -71,15 +71,10 @@ export default function Challenge8() {
     return isVisible;
   };
 
-
-  const testCol = 2
-  const testRow = 3
-
   const getVisibilityScore = (thisArr, thisHeight, thisIndex) => {
     const treesToEdge = thisArr.slice(0, thisIndex).reverse();
     const hasObstruction = treesToEdge.map((val) => val >= thisHeight).includes(true)
     const viewDistance = !hasObstruction ? treesToEdge.length : treesToEdge.findIndex((val) => val >= thisHeight) + 1;
-    const testResults = {treesToEdge, hasObstruction, viewDistance}
     return viewDistance;
   };
 
