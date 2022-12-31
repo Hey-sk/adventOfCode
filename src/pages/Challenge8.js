@@ -40,7 +40,6 @@ export default function Challenge8() {
       })
     );
     grid = grid.flat();
-    console.log({ grid });
 
     // isVisible values should be changed to true for all outside trees.
     // outside trees include everything in the first row. everything in the last row,
@@ -58,19 +57,16 @@ export default function Challenge8() {
   const checkColumn = (input, order) => {
     if (order === "topDown") {
       for (let colIndex = 0; colIndex <= maxCol; colIndex++) {
-        console.log(`evaluating column ${colIndex}`);
         const heightsInCol = input
           .filter((gridItem) => gridItem.col === colIndex)
           .map((val) => val.height);
         heightsInCol.forEach((height, rowIndex) => {
-          console.log({ height, rowIndex });
           const treesAbove = heightsInCol.slice(0, rowIndex);
           const smallestTreeAbove = treesAbove.reduce(
             (acc, val) => (acc < val ? val : acc),
             -1
           );
           const isVisible = height > smallestTreeAbove;
-          console.log({ treesAbove, smallestTreeAbove, isVisible });
           if (isVisible) {
             input = input.map((prev) => {
               if (prev.row === rowIndex && prev.col === colIndex) {
@@ -81,7 +77,6 @@ export default function Challenge8() {
             });
           }
         });
-        console.log({ index: colIndex, heightsInCol });
       }
       return input;
     } else if (order === "bottomUp") {
@@ -120,21 +115,17 @@ export default function Challenge8() {
   //review left and change to false any items that are not visible
   const checkRow = (input, order) => {
     if (order === "leftToRight") {
-      console.log(order);
       for (let rowIndex = 0; rowIndex <= maxRow; rowIndex++) {
-        console.log(`evaluating row ${rowIndex}`);
         const heightsInRow = input
           .filter((gridItem) => gridItem.row === rowIndex)
           .map((val) => val.height);
         heightsInRow.forEach((height, colIndex) => {
-          console.log({ height, colIndex });
           const treesBefore = heightsInRow.slice(0, colIndex);
           const smallestTreeBefore = treesBefore.reduce(
             (acc, val) => (acc < val ? val : acc),
             -1
           );
           const isVisible = height > smallestTreeBefore;
-          console.log({ treesBefore, smallestTreeBefore, isVisible });
           if (isVisible) {
             input = input.map((prev) => {
               if (prev.col === colIndex && prev.row === rowIndex) {
@@ -145,13 +136,10 @@ export default function Challenge8() {
             });
           }
         });
-        console.log({ result: input });
       }
       return input;
     } else if (order === "rightToLeft") {
-      console.log(order);
       for (let rowIndex = maxRow; rowIndex >= 0; rowIndex--) {
-        console.log(`evaluating row ${rowIndex}`);
         const heightsInRow = input
           .filter((gridItem) => gridItem.row === rowIndex)
           .map((val) => val.height)
@@ -159,14 +147,12 @@ export default function Challenge8() {
           .reverse();
         heightsInRow.forEach((height, colIndex) => {
           const reversedColIndex = maxCol - colIndex;
-          console.log({ height, reversedColIndex });
           const treesAfter = heightsInRow.slice(0, colIndex);
           const smallestTreeAfter = treesAfter.reduce(
             (acc, val) => (acc < val ? val : acc),
             -1
           );
           const isVisible = height > smallestTreeAfter;
-          console.log({ treesAfter, smallestTreeAfter, isVisible });
           if (isVisible) {
             input = input.map((prev) => {
               if (prev.col === reversedColIndex && prev.row === rowIndex) {
@@ -177,7 +163,6 @@ export default function Challenge8() {
             });
           }
         });
-        console.log({ result: input });
       }
       return input;
     } else {
