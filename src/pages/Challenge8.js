@@ -19,11 +19,9 @@ export default function Challenge8() {
     input = checkRow(input, "rightToLeft");
     const result1 = input.map(element => element.isVisible).filter(visible => visible === true).length
     setSol1(result1)
+    setSol2('...coming soon')
     return input;
   };
-
-  let maxRow = 0;
-  let maxCol = 0;
 
   // parse the puzzle input into rows each row should contain an object with height,
   // the coordinates, and an isVisible. isVisible will initially be set to false for everything.
@@ -40,133 +38,124 @@ export default function Challenge8() {
       })
     );
     grid = grid.flat();
-
-    // isVisible values should be changed to true for all outside trees.
-    // outside trees include everything in the first row. everything in the last row,
-    // and the first and last items from each column.
-    maxRow = grid
-      .map((val) => val.row)
-      .reduce((acc, val) => (acc > val ? acc : val));
-    maxCol = grid
-      .map((val) => val.col)
-      .reduce((acc, val) => (acc > val ? acc : val));
     return grid;
   };
 
+  const getMaxRow = (grid) => {
+    const maxRow = grid
+      .map((val) => val.row)
+      .reduce((acc, val) => (acc > val ? acc : val));
+    return maxRow
+  }
+
+  const getMaxCol = (grid) => {
+    const maxCol = grid
+      .map((val) => val.col)
+      .reduce((acc, val) => (acc > val ? acc : val));
+    return maxCol
+  }
+
+  const getIsVisible = (thisArr, thisHeight, thisRow) => {
+    const arrCopy = [...thisArr]
+    const treesToEdge = arrCopy.slice(0, thisRow);
+    const smallestTree = treesToEdge.reduce(
+      (acc, val) => (acc < val ? val : acc),
+      -1
+    );
+    const isVisible = thisHeight > smallestTree;
+    return isVisible
+  }
+
+  const updateIsVisible = (thisInput, thisRow, thisCol) => {
+    const updatedInput = thisInput.map((prev) => {
+      if (prev.row === thisRow && prev.col === thisCol) {
+        return { ...prev, isVisible: true };
+      } else {
+        return prev;
+      }
+    });
+    return updatedInput
+  }
+
+
   //review top to bottom- update any values that should be changed to isVisible: true.
   const checkColumn = (input, order) => {
+    let updatedInput = [...input]
+
     if (order === "topDown") {
-      for (let colIndex = 0; colIndex <= maxCol; colIndex++) {
+      for (let colIndex = 0; colIndex <= getMaxCol(input); colIndex++) {
         const heightsInCol = input
           .filter((gridItem) => gridItem.col === colIndex)
           .map((val) => val.height);
-        heightsInCol.forEach((height, rowIndex) => {
-          const treesAbove = heightsInCol.slice(0, rowIndex);
-          const smallestTreeAbove = treesAbove.reduce(
-            (acc, val) => (acc < val ? val : acc),
-            -1
-          );
-          const isVisible = height > smallestTreeAbove;
+        for (let rowIndex = 0; rowIndex < heightsInCol.length; rowIndex++) {
+          const height = heightsInCol[rowIndex]
+          const isVisible = getIsVisible(heightsInCol, height, rowIndex)
           if (isVisible) {
-            input = input.map((prev) => {
-              if (prev.row === rowIndex && prev.col === colIndex) {
-                return { ...prev, isVisible: true };
-              } else {
-                return prev;
-              }
-            });
+            updatedInput = updateIsVisible(updatedInput, rowIndex, colIndex)
           }
-        });
+        };
       }
-      return input;
+      return updatedInput;
     } else if (order === "bottomUp") {
-      for (let colIndex = maxCol; colIndex >= 0; colIndex--) {
+      for (let colIndex = getMaxCol(input); colIndex >= 0; colIndex--) {
         const heightsInCol = input
           .filter((gridItem) => gridItem.col === colIndex)
           .map((val) => val.height)
           .slice()
           .reverse();
-        heightsInCol.forEach((height, rowIndex) => {
-          const reversedIndex = maxRow - rowIndex;
-          const treesBelow = heightsInCol.slice(0, rowIndex);
-          const smallestTreeBelow = treesBelow.reduce(
-            (acc, val) => (acc < val ? val : acc),
-            -1
-          );
-          const isVisible = height > smallestTreeBelow;
+        for (let rowIndex = 0; rowIndex < heightsInCol.length; rowIndex++) {
+          const height = heightsInCol[rowIndex]
+          const reversedIndex = getMaxRow(input) - rowIndex;
+          const isVisible = getIsVisible(heightsInCol, height, rowIndex)
           if (isVisible) {
-            input = input.map((prev) => {
-              if (prev.row === reversedIndex && prev.col === colIndex) {
-                return { ...prev, isVisible: true };
-              } else {
-                return prev;
-              }
-            });
+            updatedInput = updateIsVisible(updatedInput, reversedIndex, colIndex)
           }
-        });
+        };
       }
-      return input;
+      return updatedInput;
     } else {
-      console.log(`invalid parameter: ${order}`);
+      alert(`invalid parameter: ${order}`);
     }
   };
 
   //review right and change to false any items that are not visible
   //review left and change to false any items that are not visible
   const checkRow = (input, order) => {
+    let updatedInput = [...input]
+
     if (order === "leftToRight") {
-      for (let rowIndex = 0; rowIndex <= maxRow; rowIndex++) {
+      for (let rowIndex = 0; rowIndex <= getMaxRow(input); rowIndex++) {
         const heightsInRow = input
           .filter((gridItem) => gridItem.row === rowIndex)
           .map((val) => val.height);
-        heightsInRow.forEach((height, colIndex) => {
-          const treesBefore = heightsInRow.slice(0, colIndex);
-          const smallestTreeBefore = treesBefore.reduce(
-            (acc, val) => (acc < val ? val : acc),
-            -1
-          );
-          const isVisible = height > smallestTreeBefore;
+        for (let colIndex = 0; colIndex < heightsInRow.length; colIndex++) {
+          const height = heightsInRow[colIndex]
+          const isVisible = getIsVisible(heightsInRow, height, colIndex)
           if (isVisible) {
-            input = input.map((prev) => {
-              if (prev.col === colIndex && prev.row === rowIndex) {
-                return { ...prev, isVisible: true };
-              } else {
-                return prev;
-              }
-            });
+            updatedInput = updateIsVisible(updatedInput, rowIndex, colIndex)
           }
-        });
+        };
       }
-      return input;
+      return updatedInput;
     } else if (order === "rightToLeft") {
-      for (let rowIndex = maxRow; rowIndex >= 0; rowIndex--) {
+      for (let rowIndex = getMaxRow(input); rowIndex >= 0; rowIndex--) {
         const heightsInRow = input
           .filter((gridItem) => gridItem.row === rowIndex)
           .map((val) => val.height)
           .slice()
           .reverse();
-        heightsInRow.forEach((height, colIndex) => {
-          const reversedColIndex = maxCol - colIndex;
-          const treesAfter = heightsInRow.slice(0, colIndex);
-          const smallestTreeAfter = treesAfter.reduce(
-            (acc, val) => (acc < val ? val : acc),
-            -1
-          );
-          const isVisible = height > smallestTreeAfter;
+        for (let colIndex = 0; colIndex < heightsInRow.length; colIndex++) {
+          const height = heightsInRow[colIndex]
+          const reversedColIndex = getMaxCol(input) - colIndex;
+          const isVisible = getIsVisible(heightsInRow, height, colIndex)
           if (isVisible) {
-            input = input.map((prev) => {
-              if (prev.col === reversedColIndex && prev.row === rowIndex) {
-                return { ...prev, isVisible: true };
-              } else {
-                return prev;
-              }
-            });
+            updatedInput = updateIsVisible(updatedInput, rowIndex, reversedColIndex)
           }
-        });
+        };
       }
-      return input;
+      return updatedInput;
     } else {
-      console.log(`invalid parameter: ${order}`);
+      alert(`invalid parameter: ${order}`);
     }
   };
   return (
