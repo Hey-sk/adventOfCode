@@ -6,7 +6,6 @@ import defaultInputs from "../components/Day8inputs";
 export default function Challenge8() {
   const [sol1, setSol1] = useState("");
   const [sol2, setSol2] = useState("");
-
   const dayNum = 8;
   const puzzleName = "Treetop Tree House";
 
@@ -17,9 +16,14 @@ export default function Challenge8() {
     input = checkColumn(input, "bottomUp");
     input = checkRow(input, "leftToRight");
     input = checkRow(input, "rightToLeft");
-    const result1 = input.map(element => element.isVisible).filter(visible => visible === true).length
-    setSol1(result1)
-    setSol2('...coming soon')
+    const result1 = input
+      .map((element) => element.isVisible)
+      .filter((visible) => visible === true).length;
+    const result2 = input.map(val => val.visScore)
+      .map(arr => arr
+      .reduce((acc, val) => acc * val))
+    setSol1(result1);
+    setSol2(Math.max(...result2));
     return input;
   };
 
@@ -34,6 +38,7 @@ export default function Challenge8() {
           col: colIndex,
           height: Number(height),
           isVisible: false,
+          visScore: []
         };
       })
     );
@@ -45,42 +50,64 @@ export default function Challenge8() {
     const maxRow = grid
       .map((val) => val.row)
       .reduce((acc, val) => (acc > val ? acc : val));
-    return maxRow
-  }
+    return maxRow;
+  };
 
   const getMaxCol = (grid) => {
     const maxCol = grid
       .map((val) => val.col)
       .reduce((acc, val) => (acc > val ? acc : val));
-    return maxCol
-  }
+    return maxCol;
+  };
 
-  const getIsVisible = (thisArr, thisHeight, thisRow) => {
-    const arrCopy = [...thisArr]
-    const treesToEdge = arrCopy.slice(0, thisRow);
+  const getIsVisible = (thisArr, thisHeight, thisIndex) => {
+    const arrCopy = [...thisArr];
+    const treesToEdge = arrCopy.slice(0, thisIndex);
     const smallestTree = treesToEdge.reduce(
       (acc, val) => (acc < val ? val : acc),
       -1
     );
     const isVisible = thisHeight > smallestTree;
-    return isVisible
-  }
+    return isVisible;
+  };
 
-  const updateIsVisible = (thisInput, thisRow, thisCol) => {
+
+  const testCol = 2
+  const testRow = 3
+
+  const getVisibilityScore = (thisArr, thisHeight, thisIndex) => {
+    const treesToEdge = thisArr.slice(0, thisIndex).reverse();
+    const hasObstruction = treesToEdge.map((val) => val >= thisHeight).includes(true)
+    const viewDistance = !hasObstruction ? treesToEdge.length : treesToEdge.findIndex((val) => val >= thisHeight) + 1;
+    const testResults = {treesToEdge, hasObstruction, viewDistance}
+    return viewDistance;
+  };
+
+  const updateIsVisible = (thisInput, thisRow, thisCol, score) => {
     const updatedInput = thisInput.map((prev) => {
       if (prev.row === thisRow && prev.col === thisCol) {
-        return { ...prev, isVisible: true };
+        return { ...prev, isVisible: true, visScore: [...prev.visScore, score] };
       } else {
         return prev;
       }
     });
-    return updatedInput
-  }
+    return updatedInput;
+  };
 
+  const updateVisScore = (thisInput, thisRow, thisCol, score) => {
+    const updatedInput = thisInput.map((prev) => {
+      if (prev.row === thisRow && prev.col === thisCol) {
+        return { ...prev, visScore: [...prev.visScore, score] };
+      } else {
+        return prev;
+      }
+    });
+    return updatedInput;
+  }
 
   //review top to bottom- update any values that should be changed to isVisible: true.
   const checkColumn = (input, order) => {
-    let updatedInput = [...input]
+    let updatedInput = [...input];
 
     if (order === "topDown") {
       for (let colIndex = 0; colIndex <= getMaxCol(input); colIndex++) {
@@ -88,12 +115,15 @@ export default function Challenge8() {
           .filter((gridItem) => gridItem.col === colIndex)
           .map((val) => val.height);
         for (let rowIndex = 0; rowIndex < heightsInCol.length; rowIndex++) {
-          const height = heightsInCol[rowIndex]
-          const isVisible = getIsVisible(heightsInCol, height, rowIndex)
+          const height = heightsInCol[rowIndex];
+          const isVisible = getIsVisible(heightsInCol, height, rowIndex);
+          const visScore = getVisibilityScore(heightsInCol, height, rowIndex)
           if (isVisible) {
-            updatedInput = updateIsVisible(updatedInput, rowIndex, colIndex)
+            updatedInput = updateIsVisible(updatedInput, rowIndex, colIndex, visScore);
+          } else {
+            updatedInput = updateVisScore(updatedInput, rowIndex, colIndex, visScore);
           }
-        };
+        }
       }
       return updatedInput;
     } else if (order === "bottomUp") {
@@ -104,13 +134,26 @@ export default function Challenge8() {
           .slice()
           .reverse();
         for (let rowIndex = 0; rowIndex < heightsInCol.length; rowIndex++) {
-          const height = heightsInCol[rowIndex]
-          const reversedIndex = getMaxRow(input) - rowIndex;
-          const isVisible = getIsVisible(heightsInCol, height, rowIndex)
+          const height = heightsInCol[rowIndex];
+          const reversedRowIndex = getMaxRow(input) - rowIndex;
+          const isVisible = getIsVisible(heightsInCol, height, rowIndex);
+          const visScore = getVisibilityScore(heightsInCol, height, rowIndex)
           if (isVisible) {
-            updatedInput = updateIsVisible(updatedInput, reversedIndex, colIndex)
+            updatedInput = updateIsVisible(
+              updatedInput,
+              reversedRowIndex,
+              colIndex,
+              visScore
+            );
+          } else {
+            updatedInput = updateVisScore(
+              updatedInput,
+              reversedRowIndex,
+              colIndex,
+              visScore
+            ); 
           }
-        };
+        }
       }
       return updatedInput;
     } else {
@@ -121,7 +164,7 @@ export default function Challenge8() {
   //review right and change to false any items that are not visible
   //review left and change to false any items that are not visible
   const checkRow = (input, order) => {
-    let updatedInput = [...input]
+    let updatedInput = [...input];
 
     if (order === "leftToRight") {
       for (let rowIndex = 0; rowIndex <= getMaxRow(input); rowIndex++) {
@@ -129,12 +172,16 @@ export default function Challenge8() {
           .filter((gridItem) => gridItem.row === rowIndex)
           .map((val) => val.height);
         for (let colIndex = 0; colIndex < heightsInRow.length; colIndex++) {
-          const height = heightsInRow[colIndex]
-          const isVisible = getIsVisible(heightsInRow, height, colIndex)
+          const height = heightsInRow[colIndex];
+          const isVisible = getIsVisible(heightsInRow, height, colIndex);
+          const visScore = getVisibilityScore(heightsInRow, height, colIndex)
+
           if (isVisible) {
-            updatedInput = updateIsVisible(updatedInput, rowIndex, colIndex)
+            updatedInput = updateIsVisible(updatedInput, rowIndex, colIndex, visScore);
+          } else {
+            updatedInput = updateVisScore(updatedInput, rowIndex, colIndex, visScore);
           }
-        };
+        }
       }
       return updatedInput;
     } else if (order === "rightToLeft") {
@@ -145,13 +192,27 @@ export default function Challenge8() {
           .slice()
           .reverse();
         for (let colIndex = 0; colIndex < heightsInRow.length; colIndex++) {
-          const height = heightsInRow[colIndex]
+          const height = heightsInRow[colIndex];
           const reversedColIndex = getMaxCol(input) - colIndex;
-          const isVisible = getIsVisible(heightsInRow, height, colIndex)
+          const isVisible = getIsVisible(heightsInRow, height, colIndex);
+          const visScore = getVisibilityScore(heightsInRow, height, colIndex)
+
           if (isVisible) {
-            updatedInput = updateIsVisible(updatedInput, rowIndex, reversedColIndex)
+            updatedInput = updateIsVisible(
+              updatedInput,
+              rowIndex,
+              reversedColIndex,
+              visScore
+            );
+          } else {
+            updatedInput = updateVisScore(
+              updatedInput,
+              rowIndex,
+              reversedColIndex,
+              visScore
+            );
           }
-        };
+        }
       }
       return updatedInput;
     } else {
