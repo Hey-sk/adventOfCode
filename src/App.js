@@ -9,7 +9,7 @@ import Challenge5 from "./pages/Challenge5";
 import Challenge6 from "./pages/Challenge6";
 import Challenge7 from "./pages/Challenge7";
 import Challenge8 from "./pages/Challenge8";
-// import Challenge9 from "./pages/Challenge9";
+import Challenge9 from "./pages/Challenge9";
 // import Challenge10 from "./pages/Challenge10";
 // import Challenge11 from "./pages/Challenge11";
 // import Challenge12 from "./pages/Challenge12";
@@ -44,8 +44,8 @@ function App() {
             <Route path="day6" element={<Challenge6 />} />
             <Route path="day7" element={<Challenge7 />} />
             <Route path="day8" element={<Challenge8 />} />
-            {/* <Route path="day9" element={<Challenge9 />} />
-            <Route path="day10" element={<Challenge10 />} />
+            <Route path="day9" element={<Challenge9 />} />
+            {/* <Route path="day10" element={<Challenge10 />} />
             <Route path="day11" element={<Challenge11 />} />
             <Route path="day12" element={<Challenge12 />} />
             <Route path="day13" element={<Challenge13 />} />
