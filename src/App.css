@@ -26,5 +26,5 @@ button:hover {
     flex-flow: row wrap;
     justify-content: center;
     margin-top: 30px;
-    gap: 55px;
+    gap: 5px;
 }

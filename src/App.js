@@ -28,6 +28,7 @@ import Challenge9 from "./pages/Challenge9";
 // import Challenge25 from "./pages/Challenge25";
 
 import Layout from "./components/Layout";
+import Footer from "./components/Footer";
 
 function App() {
   return (

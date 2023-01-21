@@ -7,17 +7,24 @@ export default function HomePage() {
     22, 23, 24, 25,
   ];
   const chistmasZebra = (index) => {
-    return { backgroundColor: index % 2 ? "rgb(255, 80, 80)" : "rgba(80, 180, 80)" };
+    return {
+      backgroundColor: index % 2 ? "rgb(255, 80, 80)" : "rgba(80, 180, 80)",
+    };
   };
 
   const getLinks = availablePages.map((num, index) => {
     return (
-      <div className="homePageLink" style={chistmasZebra(index)} key={index}>
-        <div>Day</div>
-        <div>
-          <Link className="dayLink" to={`day${num}`} style={{textDecoration: 'none'}}>{num}</Link>
+      <Link
+        key={index}
+        className="dayLink"
+        to={`day${num}`}
+        style={{ textDecoration: "none" }}
+      >
+        <div className="homePageLink" style={chistmasZebra(index)}>
+          <div>Day</div>
+          {num}
         </div>
-      </div>
+      </Link>
     );
   });
 
