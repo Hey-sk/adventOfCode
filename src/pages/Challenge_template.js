@@ -24,8 +24,8 @@ export default function Challenge_template() {
       <Output
         solution={sol1}
         part2Solution={sol2}
-        // clickSolution1={}
-        // clickSolution2={}
+        clickSolution1={()=> alert(sol1)}
+        clickSolution2={()=> alert(sol2)}
       />
     </div>
   );
