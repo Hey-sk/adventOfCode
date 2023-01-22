@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../components/Input";
 import Output from "../components/Output";
 import defaultInputs from "../components/Day10inputs";
 
 export default function Challenge10() {
+  const [cyclesLog, setCyclesLog] = useState([])
+  const [crv, setCrv] = useState("");
   const [sol1, setSol1] = useState("");
   const [sol2, setSol2] = useState("");
 
@@ -11,8 +13,8 @@ export default function Challenge10() {
     event.preventDefault();
     const commands = parseInput(event.target.textInput.value);
     const sol1Arr = runCommands(commands);
-    setSol1(sol1Arr.reduce((acc, val) => acc + val))
-    setSol2('coming soon')
+    setSol1(sol1Arr.reduce((acc, val) => acc + val));
+    setSol2("coming soon");
   };
 
   const parseInput = (input) => {
@@ -31,33 +33,68 @@ export default function Challenge10() {
   const runCommands = (commands) => {
     let cycles = 0;
     let x = 1;
+    let spritePosition = [0, 1, 2];
     const commandResultsLog = [];
-    commands.forEach((command) => {
-      cycles = cycles + command.cycles;
-      x = x + command.modifier;
-      commandResultsLog.push({ cycles, x });
+
+    commands.forEach((command, index) => {
+      for (let i = 0; i < command.cycles; i++) {
+        cycles = cycles + 1;
+        if (i === 0) {
+          x = index - 1 >= 0 ? x + commands[index - 1].modifier : x;
+          spritePosition = [x - 1, x, x + 1];
+        }
+        commandResultsLog.push({
+          cycles,
+          crvIndex: (cycles - 1) - (Math.floor((cycles - 1)/40) * 40),
+          x,
+          spritePosition,
+          pixel: spritePosition.includes((cycles - 1) - (Math.floor((cycles - 1)/40) * 40)) ? "#" : "_",
+        });
+      }
     });
-    const totalCycles = commandResultsLog[commandResultsLog.length - 1].cycles;
-    const targetCycles = [];
-    for (let i = 20; i <= totalCycles; i += 40) {
-      targetCycles.push(i);
+    const lastCycle = commandResultsLog[commandResultsLog.length - 1].cycles;
+    const targetIndices = [];
+    for (let i = 20; i <= lastCycle; i += 40) {
+      targetIndices.push(i);
     }
 
-    const targetIndices = targetCycles
-      .map((target) =>
-        commandResultsLog.findIndex((val) => val.cycles >= target)
-      )
-      .map((i) => i - 1);
-
-    const targetValues = targetIndices.map((i, index) => {
-      console.log({multBy: targetCycles[index], xVal: commandResultsLog[i].x})
-      return ( commandResultsLog[i].x * targetCycles[index] )
-    }
-  
+    const signals = targetIndices.map((index) =>
+      commandResultsLog.find((val) => val.cycles === index)
     );
-    console.log(targetValues)
-    return targetValues
+    console.log({ signals });
+
+    const pixelArr = commandResultsLog.map((val) => val.pixel);
+    const pixelStr = pixelArr.join("");
+    const crvArr = [];
+    for (let i = 0; i < pixelStr.length; i += 40) {
+      crvArr.push(pixelStr.slice(i, i + 39));
+    }
+    setCrv(
+      crvArr.map((str, index) => {
+        return <div key={index} style={{fontSize:'16px'}}>{str}</div>;
+      })
+    );
+    setCyclesLog(commandResultsLog)
+    return signals.map((signal) => signal.cycles * signal.x);
   };
+
+  const renderCSV = (log) => {
+    if (log.length) {
+      console.log('rendering CSV begins');
+      const logCopy = [...log]
+      const readableSteps = logCopy.map((step, index) => {
+        return {
+          index,
+          crvIndex: step.crvIndex
+        }
+      })
+      console.log({readableSteps})
+    }
+  }
+
+  useEffect(()=> {
+    renderCSV(cyclesLog)
+  },[cyclesLog])
 
   return (
     <div className="main-wrapper">
@@ -69,7 +106,7 @@ export default function Challenge10() {
       />
       <Output
         solution={sol1}
-        part2Solution={sol2}
+        part2Solution={crv}
         clickSolution1={() => alert(sol1)}
         clickSolution2={() => alert(sol2)}
       />
