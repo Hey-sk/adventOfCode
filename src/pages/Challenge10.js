@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Input from "../components/Input";
 import Output from "../components/Output";
 import defaultInputs from "../components/Day10inputs";
 
 export default function Challenge10() {
-  const [cyclesLog, setCyclesLog] = useState([])
-  const [crv, setCrv] = useState("");
+  
   const [sol1, setSol1] = useState("");
   const [sol2, setSol2] = useState("");
 
@@ -14,7 +13,6 @@ export default function Challenge10() {
     const commands = parseInput(event.target.textInput.value);
     const sol1Arr = runCommands(commands);
     setSol1(sol1Arr.reduce((acc, val) => acc + val));
-    setSol2("coming soon");
   };
 
   const parseInput = (input) => {
@@ -48,7 +46,7 @@ export default function Challenge10() {
           crvIndex: (cycles - 1) - (Math.floor((cycles - 1)/40) * 40),
           x,
           spritePosition,
-          pixel: spritePosition.includes((cycles - 1) - (Math.floor((cycles - 1)/40) * 40)) ? "#" : "_",
+          pixel: spritePosition.includes((cycles - 1) - (Math.floor((cycles - 1)/40) * 40)) ? "#" : ".",
         });
       }
     });
@@ -69,32 +67,13 @@ export default function Challenge10() {
     for (let i = 0; i < pixelStr.length; i += 40) {
       crvArr.push(pixelStr.slice(i, i + 39));
     }
-    setCrv(
+    setSol2(
       crvArr.map((str, index) => {
-        return <div key={index} style={{fontSize:'16px'}}>{str}</div>;
+        return <div key={index} style={{fontFamily:'monospace', fontSize:'14px'}}>{str}</div>;
       })
     );
-    setCyclesLog(commandResultsLog)
     return signals.map((signal) => signal.cycles * signal.x);
   };
-
-  const renderCSV = (log) => {
-    if (log.length) {
-      console.log('rendering CSV begins');
-      const logCopy = [...log]
-      const readableSteps = logCopy.map((step, index) => {
-        return {
-          index,
-          crvIndex: step.crvIndex
-        }
-      })
-      console.log({readableSteps})
-    }
-  }
-
-  useEffect(()=> {
-    renderCSV(cyclesLog)
-  },[cyclesLog])
 
   return (
     <div className="main-wrapper">
@@ -106,7 +85,7 @@ export default function Challenge10() {
       />
       <Output
         solution={sol1}
-        part2Solution={crv}
+        part2Solution={sol2}
         clickSolution1={() => alert(sol1)}
         clickSolution2={() => alert(sol2)}
       />
