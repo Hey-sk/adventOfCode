@@ -59,7 +59,6 @@ export default function Challenge10() {
     const signals = targetIndices.map((index) =>
       commandResultsLog.find((val) => val.cycles === index)
     );
-    console.log({ signals });
 
     const pixelArr = commandResultsLog.map((val) => val.pixel);
     const pixelStr = pixelArr.join("");
